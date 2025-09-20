@@ -35,7 +35,7 @@
 ### Шаг 1: Клонирование репозитория
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/MIndistCalm/firebase_kanban.git
 cd firebase_kanban
 ```
 
