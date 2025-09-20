@@ -1,9 +1,10 @@
-import { Layout, Button, Typography, Space, Dropdown, message } from 'antd';
+import { Layout, Button, Typography, Space, Dropdown } from 'antd';
 import { LogoutOutlined, UserOutlined, MenuOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { logout } from '../store/slices/authSlice';
-import { TaskList } from '../components/Tasks/TaskList';
+import { TaskDashboard } from '../components/Tasks/TaskDashboard';
 import { VALIDATION_CONSTANTS } from '../constants';
+import { useToast } from '../components/Toast';
 import '../styles/homepage.css';
 
 const { Header, Content } = Layout;
@@ -12,13 +13,14 @@ const { Text } = Typography;
 export const HomePage = () => {
     const dispatch = useAppDispatch();
     const { user } = useAppSelector((state) => state.auth);
+    const { showToast } = useToast();
 
     const handleLogout = async () => {
         try {
             await dispatch(logout()).unwrap();
-            message.success(VALIDATION_CONSTANTS.SUCCESS.LOGOUT_SUCCESS);
+            showToast(VALIDATION_CONSTANTS.SUCCESS.LOGOUT_SUCCESS, 'success');
         } catch (error) {
-            message.error(VALIDATION_CONSTANTS.ACTION_ERRORS.LOGOUT_ERROR);
+            showToast(VALIDATION_CONSTANTS.ACTION_ERRORS.LOGOUT_ERROR, 'error');
         }
     };
 
@@ -53,27 +55,10 @@ export const HomePage = () => {
         <Layout className="homepage-layout">
             <Header className="homepage-header">
                 <Typography.Title level={3} className="homepage-title">
-                    Task Manager
+                    TM
                 </Typography.Title>
-
-                {/* Десктопная версия */}
-                <Space className="desktop-only" style={{ display: 'none' }}>
-                    <Space>
-                        <UserOutlined />
-                        <Text>{user?.displayName || user?.email}</Text>
-                    </Space>
-                    <Button
-                        type="primary"
-                        danger
-                        icon={<LogoutOutlined />}
-                        onClick={handleLogout}
-                    >
-                        Выйти
-                    </Button>
-                </Space>
-
-                {/* Мобильная версия */}
-                <Dropdown menu={{ items: userMenuItems }} trigger={['click']} className="mobile-only">
+                {/* Бургер меню */}
+                <Dropdown menu={{ items: userMenuItems }} trigger={['click']}>
                     <Button
                         type="text"
                         icon={<MenuOutlined />}
@@ -83,7 +68,7 @@ export const HomePage = () => {
             </Header>
 
             <Content className="homepage-content">
-                <TaskList />
+                <TaskDashboard />
             </Content>
         </Layout>
     );

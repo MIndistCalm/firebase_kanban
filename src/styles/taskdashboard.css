@@ -1,0 +1,18 @@
+.taskdashboard-container {
+  padding: 24px;
+}
+
+.taskdashboard-header {
+  margin-bottom: 24px;
+}
+
+/* Мобилка */
+@media (max-width: 768px) {
+  .taskdashboard-container {
+    padding: 16px;
+  }
+  
+  .taskdashboard-header {
+    margin-bottom: 16px;
+  }
+}

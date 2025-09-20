@@ -7,26 +7,6 @@
   margin-bottom: 24px;
 }
 
-.tasklist-stats {
-  margin-bottom: 24px;
-}
-
-.tasklist-filters {
-  margin-bottom: 24px;
-}
-
-.tasklist-filters-space {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.tasklist-filters-left {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
 .tasklist-tasks-container {
   display: flex;
   flex-wrap: wrap;

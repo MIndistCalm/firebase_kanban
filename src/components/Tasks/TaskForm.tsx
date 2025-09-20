@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import { Modal, Form, Input, Select, Button, message, Space } from 'antd';
+import { Modal, Form, Input, Select, Button, Space } from 'antd';
 import type { TaskFormData } from '../../types';
 import { VALIDATION_CONSTANTS, TASK_PRIORITIES, TASK_PRIORITY_LABELS, UI_CONSTANTS } from '../../constants';
+import { useToast } from '../Toast';
 import '../../styles/taskform.css';
 
 const { TextArea } = Input;
@@ -25,6 +26,7 @@ export const TaskForm = ({
     title,
 }: TaskFormProps) => {
     const [form] = Form.useForm();
+    const { showToast } = useToast();
 
     useEffect(() => {
         if (visible) {
@@ -39,7 +41,7 @@ export const TaskForm = ({
             await onSubmit(values);
             form.resetFields();
         } catch (error) {
-            message.error('Ошибка при сохранении задачи');
+            showToast('Ошибка при сохранении задачи', 'error');
         }
     };
 

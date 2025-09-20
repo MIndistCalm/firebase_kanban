@@ -1,0 +1,46 @@
+.taskfilters-container {
+  margin-bottom: 24px;
+}
+
+.taskfilters-space {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.taskfilters-left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Мобилка */
+@media (max-width: 768px) {
+  .taskfilters-space {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  
+  .taskfilters-left {
+    justify-content: center;
+  }
+  
+  .taskfilters-container {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .taskfilters-left {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .taskfilters-left .ant-select,
+  .taskfilters-left .ant-input-search {
+    width: 100% !important;
+    min-width: auto !important;
+  }
+}

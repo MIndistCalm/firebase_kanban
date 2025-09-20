@@ -1,9 +1,10 @@
-import { Form, Input, Button, Card, Typography, message } from 'antd';
+import { Form, Input, Button, Card, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { login, clearError } from '../../store/slices/authSlice';
 import { useEffect } from 'react';
 import { VALIDATION_CONSTANTS } from '../../constants';
+import { useToast } from '../Toast';
 import '../../styles/auth.css';
 
 const { Title } = Typography;
@@ -16,22 +17,24 @@ export const LoginForm = ({ onSwitchToRegister }: LoginFormProps) => {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
     const { loading, error } = useAppSelector((state) => state.auth);
+    const { showToast } = useToast();
+
 
     const handleSubmit = async (values: { email: string; password: string }) => {
         try {
             await dispatch(login(values)).unwrap();
-            message.success(VALIDATION_CONSTANTS.SUCCESS.LOGIN_SUCCESS);
+            showToast(VALIDATION_CONSTANTS.SUCCESS.LOGIN_SUCCESS, 'success');
         } catch (error) {
-            message.error(VALIDATION_CONSTANTS.ACTION_ERRORS.LOGIN_ERROR);
+            showToast(VALIDATION_CONSTANTS.ACTION_ERRORS.LOGIN_ERROR, 'error');
         }
     };
 
     useEffect(() => {
         if (error) {
-            message.error(error);
+            showToast(error, 'error');
             dispatch(clearError());
         }
-    }, [error, dispatch]);
+    }, [error, dispatch, showToast]);
 
     return (
         <Card className="auth-form-container">

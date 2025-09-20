@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { Form, Input, Button, Card, Typography, message } from 'antd';
+import { Form, Input, Button, Card, Typography } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { register, clearError } from '../../store/slices/authSlice';
 import { VALIDATION_CONSTANTS } from '../../constants';
+import { useToast } from '../Toast';
 import '../../styles/auth.css';
 
 const { Title } = Typography;
@@ -18,10 +19,11 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { loading, error } = useAppSelector((state) => state.auth);
+    const { showToast } = useToast();
 
     const handleSubmit = async (values: { email: string; password: string; confirmPassword: string; displayName?: string }) => {
         if (values.password !== values.confirmPassword) {
-            message.error(VALIDATION_CONSTANTS.ERRORS.PASSWORDS_NOT_MATCH);
+            showToast(VALIDATION_CONSTANTS.ERRORS.PASSWORDS_NOT_MATCH, 'error');
             return;
         }
 
@@ -31,19 +33,19 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
                 password: values.password,
                 displayName: values.displayName,
             })).unwrap();
-            message.success(VALIDATION_CONSTANTS.SUCCESS.REGISTER_SUCCESS);
+            showToast(VALIDATION_CONSTANTS.SUCCESS.REGISTER_SUCCESS, 'success');
             navigate('/home');
         } catch (error) {
-            message.error(VALIDATION_CONSTANTS.ACTION_ERRORS.REGISTER_ERROR);
+            showToast(VALIDATION_CONSTANTS.ACTION_ERRORS.REGISTER_ERROR, 'error');
         }
     };
 
     useEffect(() => {
         if (error) {
-            message.error(error);
+            showToast(error, 'error');
             dispatch(clearError());
         }
-    }, [error, dispatch]);
+    }, [error, dispatch, showToast]);
 
     return (
         <Card className="auth-form-container">

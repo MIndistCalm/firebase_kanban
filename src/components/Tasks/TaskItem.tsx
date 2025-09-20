@@ -1,9 +1,10 @@
-import { Card, Checkbox, Button, Typography, Space, Tag, Popconfirm, message } from 'antd';
+import { Card, Checkbox, Button, Typography, Space, Tag, Popconfirm } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import type { Task, TaskPriority } from '../../types';
 import { useAppDispatch } from '../../hooks/redux';
 import { toggleTask, removeTask } from '../../store/slices/taskSlice';
 import { TASK_PRIORITY_LABELS, TASK_PRIORITY_COLORS, VALIDATION_CONSTANTS } from '../../constants';
+import { useToast } from '../Toast';
 import '../../styles/taskitem.css';
 
 const { Text, Paragraph } = Typography;
@@ -15,6 +16,7 @@ interface TaskItemProps {
 
 export const TaskItem = ({ task, onEdit }: TaskItemProps) => {
     const dispatch = useAppDispatch();
+    const { showToast } = useToast();
 
     const handleToggle = async () => {
         try {
@@ -22,18 +24,18 @@ export const TaskItem = ({ task, onEdit }: TaskItemProps) => {
             const messageText = task.completed
                 ? VALIDATION_CONSTANTS.SUCCESS.TASK_UNCOMPLETED
                 : VALIDATION_CONSTANTS.SUCCESS.TASK_COMPLETED;
-            message.success(messageText);
+            showToast(messageText, 'success');
         } catch (error) {
-            message.error(VALIDATION_CONSTANTS.ACTION_ERRORS.TASK_TOGGLE_ERROR);
+            showToast(VALIDATION_CONSTANTS.ACTION_ERRORS.TASK_TOGGLE_ERROR, 'error');
         }
     };
 
     const handleDelete = async () => {
         try {
             await dispatch(removeTask(task.id)).unwrap();
-            message.success(VALIDATION_CONSTANTS.SUCCESS.TASK_DELETED);
+            showToast(VALIDATION_CONSTANTS.SUCCESS.TASK_DELETED, 'success');
         } catch (error) {
-            message.error(VALIDATION_CONSTANTS.ACTION_ERRORS.TASK_DELETE_ERROR);
+            showToast(VALIDATION_CONSTANTS.ACTION_ERRORS.TASK_DELETE_ERROR, 'error');
         }
     };
 
