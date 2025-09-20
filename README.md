@@ -1,143 +1,179 @@
-# Task Manager - Firebase Kanban
+# Firebase Kanban Task Manager
 
-Простое приложение для управления списком задач с аутентификацией пользователей и работой с реальной базой данных Firebase.
+Веб-приложение для управления задачами, построенное на React, TypeScript, Firebase и Ant Design.
+
+## Демо
+
+Приложение доступно по адресу: [https://fir-kanban-db797.web.app](https://fir-kanban-db797.web.app)
+
+## Возможности
+
+- Аутентификация пользователей
+- Создание, редактирование и удаление задач
+- Фильтрация и поиск задач
+- Статистика выполнения
+- Адаптивный дизайн
+- Уведомления о действиях
 
 ## Технологии
 
-- **React 19** с функциональными компонентами и хуками
-- **TypeScript** для типизации
-- **Vite** для сборки и разработки
-- **Firebase** (Authentication + Firestore)
-- **Ant Design** для UI компонентов
-- **Redux Toolkit** для управления состоянием
-
-## Функциональность
-
-### Аутентификация
-- ✅ Регистрация нового пользователя (email + пароль)
-- ✅ Вход существующего пользователя
-- ✅ Выход из системы
-- ✅ Защищенные маршруты (только для авторизованных пользователей)
-
-### Управление задачами (CRUD операции)
-- ✅ Просмотр списка задач (только задачи текущего пользователя)
-- ✅ Добавление новой задачи (текст, статус, приоритет, дата создания)
-- ✅ Редактирование существующей задачи
-- ✅ Удаление задачи
-- ✅ Отметка задачи как выполненной
-- ✅ Фильтрация задач по статусу (все, активные, выполненные)
-- ✅ Поиск по задачам
-
-### Интерфейс
-- ✅ Адаптивный дизайн
-- ✅ Чистый и современный UI
-- ✅ Уведомления об операциях (успех/ошибка)
-- ✅ Loading states для асинхронных операций
+- React 18 + TypeScript
+- Vite (сборщик)
+- Ant Design (UI компоненты)
+- Redux Toolkit (состояние)
+- Firebase (аутентификация и база данных)
+- React Router (маршрутизация)
 
 ## Установка и запуск
 
-### 1. Установка зависимостей
+### Предварительные требования
+
+- Node.js 18 или выше
+- npm или yarn
+- Firebase CLI
+
+### Шаг 1: Клонирование репозитория
+
+```bash
+git clone <repository-url>
+cd firebase_kanban
+```
+
+### Шаг 2: Установка зависимостей
 
 ```bash
 npm install
 ```
 
-### 2. Настройка Firebase
+### Шаг 3: Настройка Firebase
 
-1. Создайте проект в [Firebase Console](https://console.firebase.google.com/)
-2. Включите Authentication с провайдером Email/Password
-3. Создайте Firestore Database
-4. Настройте правила безопасности (см. раздел ниже)
+1. Установите Firebase CLI:
+```bash
+npm install -g firebase-tools
+```
 
-### 3. Настройка переменных окружения
+2. Войдите в Firebase:
+```bash
+firebase login
+```
+
+3. Инициализируйте проект:
+```bash
+firebase init
+```
+
+При инициализации выберите:
+- **Authentication** - для настройки аутентификации
+- **Firestore** - для базы данных
+- **Hosting** - для хостинга
+
+### Шаг 4: Настройка переменных окружения
 
 Создайте файл `.env` в корне проекта:
 
 ```env
-VITE_FIREBASE_API_KEY=your-api-key
-VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your-project-id
-VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
-VITE_FIREBASE_APP_ID=your-app-id
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
 ```
 
-### 4. Настройка правил безопасности Firestore
+Получить эти значения можно в [Firebase Console](https://console.firebase.google.com/) в настройках проекта.
 
-В Firebase Console перейдите в Firestore Database > Rules и установите следующие правила:
+### Шаг 5: Настройка Firebase Authentication
+
+1. В Firebase Console перейдите в раздел **Authentication**
+2. Включите провайдер **Email/Password**
+3. Настройте домен для аутентификации
+
+### Шаг 6: Настройка Firestore
+
+1. В Firebase Console перейдите в раздел **Firestore Database**
+2. Создайте базу данных
+3. Установите правила безопасности:
 
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /tasks/{taskId} {
+    match /tasks/{document} {
       allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
-      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
     }
   }
 }
 ```
 
-### 5. Запуск приложения
+### Шаг 7: Запуск приложения
 
 ```bash
-# Режим разработки
 npm run dev
-
-# Сборка для продакшена
-npm run build
-
-# Предварительный просмотр сборки
-npm run preview
 ```
+
+Приложение будет доступно по адресу `http://localhost:5173`
+
+## Доступные команды
+
+```bash
+# Разработка
+npm run dev          # Запуск dev сервера
+npm run build        # Сборка для продакшена
+npm run preview      # Предварительный просмотр сборки
+
+# Firebase
+firebase deploy      # Деплой на Firebase Hosting
+```
+
+## Деплой на Firebase Hosting
+
+1. Соберите проект:
+```bash
+npm run build
+```
+
+2. Деплой:
+```bash
+firebase deploy --only hosting
+```
+
+После успешного деплоя вы получите URL вашего приложения.
 
 ## Структура проекта
 
+```
 src/
-├── components/ # React компоненты
-│ ├── Auth/ # Компоненты аутентификации
-│ └── Tasks/ # Компоненты для работы с задачами
-├── pages/ # Страницы приложения
-├── store/ # Redux store и slices
-│ └── slices/ # Redux slices
-├── services/ # Сервисы для работы с API
-├── types/ # TypeScript типы
-├── hooks/ # Кастомные хуки
-├── utils/ # Утилиты
-└── App.tsx # Главный компонент
-
-## Структура данных
-
-### Пользователь (Firebase Authentication)
-```typescript
-{
-  uid: string,
-  email: string,
-  displayName: string (optional)
-}
+├── components/          # UI компоненты
+│   ├── Auth/           # Аутентификация
+│   ├── Tasks/          # Модуль задач
+│   └── Toast/          # Уведомления
+├── pages/              # Страницы
+├── store/              # Redux состояние
+├── services/           # Firebase сервисы
+├── utils/              # Утилиты
+├── types/              # TypeScript типы
+├── constants/          # Константы
+└── styles/             # CSS стили
 ```
 
-### Задача (Firestore)
-```typescript
-{
-  id: string, // auto-generated
-  title: string,
-  description: string,
-  completed: boolean,
-  priority: 'low' | 'medium' | 'high',
-  createdAt: timestamp,
-  updatedAt: timestamp,
-  userId: string // ID владельца задачи
-}
-```
+## Возможные проблемы
 
-## Скрипты
+### Ошибка "Firebase project not found"
+- Убедитесь, что вы вошли в правильный Firebase проект
+- Проверьте настройки в `.firebaserc`
 
-- `npm run dev` - запуск в режиме разработки
-- `npm run build` - сборка для продакшена
-- `npm run preview` - предварительный просмотр сборки
-- `npm run lint` - проверка кода линтером
+### Ошибка "Missing or insufficient permissions"
+- Проверьте правила безопасности Firestore
+- Убедитесь, что аутентификация настроена правильно
 
-## Лицензия
+### Ошибка "Firebase app not initialized"
+- Проверьте переменные окружения в `.env`
+- Убедитесь, что все значения заполнены правильно
 
-MIT License
+## Поддержка
+
+Если возникли проблемы, проверьте:
+1. Версию Node.js (должна быть 18+)
+2. Настройки Firebase в консоли
+3. Переменные окружения
+4. Правила безопасности Firestore
