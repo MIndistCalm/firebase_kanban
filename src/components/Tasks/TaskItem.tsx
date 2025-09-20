@@ -3,6 +3,7 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import type { Task, TaskPriority } from '../../types';
 import { useAppDispatch } from '../../hooks/redux';
 import { toggleTask, removeTask } from '../../store/slices/taskSlice';
+import '../../styles/taskitem.css';
 
 const { Text, Paragraph } = Typography;
 
@@ -51,53 +52,43 @@ export const TaskItem = ({ task, onEdit }: TaskItemProps) => {
     return (
         <Card
             size="small"
-            style={{
-                marginBottom: 8,
-                opacity: task.completed ? 0.7 : 1,
-                textDecoration: task.completed ? 'line-through' : 'none',
-            }}
+            className={`taskitem-card ${task.completed ? 'taskitem-card-completed' : ''}`}
         >
-            <Space direction="vertical" style={{ width: '100%' }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+            <Space direction="vertical" className="taskitem-content">
+                <div className="taskitem-header">
                     <Checkbox
                         checked={task.completed}
                         onChange={handleToggle}
-                        style={{ marginTop: 4 }}
+                        className="taskitem-checkbox"
                     />
 
-                    <div style={{ flex: 1 }}>
+                    <div className="taskitem-main">
                         <Text
                             strong
-                            style={{
-                                fontSize: 16,
-                                textDecoration: task.completed ? 'line-through' : 'none',
-                            }}
+                            className={`taskitem-title ${task.completed ? 'taskitem-title-completed' : ''}`}
                         >
                             {task.title}
                         </Text>
 
                         {task.description && (
                             <Paragraph
-                                style={{
-                                    margin: '8px 0',
-                                    color: task.completed ? '#999' : '#666',
-                                }}
+                                className={`taskitem-description ${task.completed ? 'taskitem-description-completed' : ''}`}
                             >
                                 {task.description}
                             </Paragraph>
                         )}
 
-                        <Space wrap>
+                        <Space wrap className="taskitem-meta">
                             <Tag color={getPriorityColor(task.priority)}>
                                 {getPriorityText(task.priority)}
                             </Tag>
-                            <Text type="secondary" style={{ fontSize: 12 }}>
+                            <Text type="secondary" className="taskitem-date">
                                 {new Date(task.createdAt).toLocaleDateString('ru-RU')}
                             </Text>
                         </Space>
                     </div>
 
-                    <Space>
+                    <Space className="taskitem-actions">
                         <Button
                             type="text"
                             icon={<EditOutlined />}

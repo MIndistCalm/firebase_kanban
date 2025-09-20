@@ -1,8 +1,9 @@
-import { Layout, Button, Typography, Space } from 'antd';
-import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { Layout, Button, Typography, Space, Dropdown, Menu } from 'antd';
+import { LogoutOutlined, UserOutlined, MenuOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { logout } from '../store/slices/authSlice';
 import { TaskList } from '../components/Tasks/TaskList';
+import '../styles/homepage.css';
 
 const { Header, Content } = Layout;
 const { Text } = Typography;
@@ -15,21 +16,42 @@ export const HomePage = () => {
         dispatch(logout());
     };
 
+    const userMenuItems = [
+        {
+            key: 'user',
+            disabled: true,
+            label: (
+                <Space>
+                    <UserOutlined />
+                    <Text>{user?.displayName || user?.email}</Text>
+                </Space>
+            ),
+        },
+        {
+            type: 'divider' as const,
+        },
+        {
+            key: 'logout',
+            label: (
+                <Space>
+                    <LogoutOutlined />
+                    Выйти
+                </Space>
+            ),
+            onClick: handleLogout,
+            danger: true,
+        },
+    ];
+
     return (
-        <Layout style={{ minHeight: '100vh' }}>
-            <Header style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                background: '#fff',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                padding: '0 24px'
-            }}>
-                <Typography.Title level={3} style={{ margin: 0, color: '#1890ff' }}>
+        <Layout className="homepage-layout">
+            <Header className="homepage-header">
+                <Typography.Title level={3} className="homepage-title">
                     Task Manager
                 </Typography.Title>
 
-                <Space>
+                {/* Десктопная версия */}
+                <Space className="desktop-only" style={{ display: 'none' }}>
                     <Space>
                         <UserOutlined />
                         <Text>{user?.displayName || user?.email}</Text>
@@ -43,9 +65,18 @@ export const HomePage = () => {
                         Выйти
                     </Button>
                 </Space>
+
+                {/* Мобильная версия */}
+                <Dropdown menu={{ items: userMenuItems }} trigger={['click']} className="mobile-only">
+                    <Button
+                        type="text"
+                        icon={<MenuOutlined />}
+                        size='middle'
+                    />
+                </Dropdown>
             </Header>
 
-            <Content style={{ background: '#f5f5f5' }}>
+            <Content className="homepage-content">
                 <TaskList />
             </Content>
         </Layout>

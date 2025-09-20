@@ -1,0 +1,61 @@
+/* TaskItem стили */
+.taskitem-card {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.taskitem-card-completed {
+  opacity: 0.7;
+  text-decoration: line-through;
+}
+
+.taskitem-content {
+  width: 100%;
+}
+
+.taskitem-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.taskitem-checkbox {
+  margin-top: 4px;
+}
+
+.taskitem-main {
+  flex: 1;
+}
+
+.taskitem-title {
+  font-size: 16px;
+}
+
+.taskitem-title-completed {
+  text-decoration: line-through;
+}
+
+.taskitem-description {
+  margin: 8px 0;
+  color: #666;
+}
+
+.taskitem-description-completed {
+  color: #999;
+}
+
+.taskitem-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.taskitem-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.taskitem-actions {
+  display: flex;
+  gap: 4px;
+}

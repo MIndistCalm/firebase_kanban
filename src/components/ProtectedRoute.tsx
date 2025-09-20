@@ -2,6 +2,7 @@ import { Navigate } from 'react-router-dom';
 import { Spin } from 'antd';
 import { useAppSelector } from '../hooks/redux';
 import type { ReactNode } from 'react';
+import '../styles/protectedroute.css';
 
 interface ProtectedRouteProps {
     children: ReactNode;
@@ -12,12 +13,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
     if (loading) {
         return (
-            <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh'
-            }}>
+            <div className="protectedroute-loading">
                 <Spin size="large" />
             </div>
         );

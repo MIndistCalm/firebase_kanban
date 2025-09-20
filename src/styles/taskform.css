@@ -1,0 +1,27 @@
+/* TaskForm стили */
+.taskform-modal .ant-modal-body {
+  padding: 24px;
+}
+
+.taskform-form {
+  width: 100%;
+}
+
+.taskform-form-item {
+  margin-bottom: 16px;
+}
+
+.taskform-submit-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.taskform-submit-button {
+  min-width: 80px;
+}
+
+.taskform-cancel-button {
+  min-width: 80px;
+}

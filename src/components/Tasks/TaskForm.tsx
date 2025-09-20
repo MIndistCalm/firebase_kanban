@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Modal, Form, Input, Select, Button, message, Space } from 'antd';
 import type { TaskFormData } from '../../types';
+import '../../styles/taskform.css';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -91,12 +92,12 @@ export const TaskForm = ({
                     </Select>
                 </Form.Item>
 
-                <Form.Item style={{ marginBottom: 0, textAlign: 'right' }}>
+                <Form.Item className="taskform-submit-buttons">
                     <Space>
-                        <Button onClick={onCancel}>
+                        <Button onClick={onCancel} className="taskform-cancel-button">
                             Отмена
                         </Button>
-                        <Button type="primary" htmlType="submit" loading={loading}>
+                        <Button type="primary" htmlType="submit" loading={loading} className="taskform-submit-button">
                             Сохранить
                         </Button>
                     </Space>

@@ -1,0 +1,21 @@
+/* Адаптивные карточки задач */
+.task-card {
+  width: 300px;
+  flex: 0 0 300px;
+}
+
+@media (max-width: 768px) {
+  .task-card {
+    width: 100%;
+    flex: 1 1 100%;
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .task-card {
+    width: 100%;
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+}

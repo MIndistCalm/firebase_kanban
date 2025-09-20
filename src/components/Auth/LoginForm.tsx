@@ -3,6 +3,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { login, clearError } from '../../store/slices/authSlice';
 import { useEffect } from 'react';
+import '../../styles/auth.css';
 
 const { Title } = Typography;
 
@@ -32,8 +33,8 @@ export const LoginForm = ({ onSwitchToRegister }: LoginFormProps) => {
     }, [error, dispatch]);
 
     return (
-        <Card style={{ maxWidth: 400, margin: '0 auto' }}>
-            <Title level={2} style={{ textAlign: 'center', marginBottom: 24 }}>
+        <Card className="auth-form-container">
+            <Title level={2} className="auth-title">
                 Вход
             </Title>
 
@@ -82,8 +83,8 @@ export const LoginForm = ({ onSwitchToRegister }: LoginFormProps) => {
                 </Form.Item>
             </Form>
 
-            <div style={{ textAlign: 'center', marginTop: 16 }}>
-                <Button type="link" onClick={onSwitchToRegister}>
+            <div className="auth-switch-link">
+                <Button type="link" onClick={onSwitchToRegister} className="auth-switch-button">
                     Нет аккаунта? Зарегистрироваться
                 </Button>
             </div>

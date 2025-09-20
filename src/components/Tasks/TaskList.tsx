@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { List, Empty, Spin, Button, Input, Select, Space, Typography, Statistic, Row, Col } from 'antd';
+import { Empty, Spin, Button, Input, Select, Space, Typography, Statistic, Row, Col, Card } from 'antd';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import type { Task, TaskFilter, TaskFormData } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -7,11 +7,13 @@ import { addTask, editTask, fetchTasks, setFilter, setSearchQuery } from '../../
 import { getFilteredTasks, getTaskStats, sortTasksByPriority } from '../../utils/taskUtils';
 import { TaskItem } from './TaskItem';
 import { TaskForm } from './TaskForm';
+import '../../styles/tasklist.css';
 
 const { Search } = Input;
 const { Option } = Select;
 const { Title } = Typography;
 
+// Пагинацию не делал
 export const TaskList = () => {
     const dispatch = useAppDispatch();
     const { tasks, loading, filter, searchQuery } = useAppSelector((state) => state.tasks);
@@ -64,71 +66,83 @@ export const TaskList = () => {
     };
 
     return (
-        <div style={{ padding: '24px' }}>
-            <div style={{ marginBottom: 24 }}>
+        <div className="tasklist-container">
+            <div className="tasklist-header">
                 <Title level={2}>Мои задачи</Title>
 
                 {/* Статистика */}
-                <Row gutter={16} style={{ marginBottom: 24 }}>
-                    <Col span={6}>
-                        <Statistic title="Всего задач" value={stats.total} />
+                <Row gutter={[16, 16]} className="tasklist-stats">
+                    <Col xs={12} sm={6}>
+                        <Card>
+                            <Statistic title="Всего задач" value={stats.total} />
+                        </Card>
                     </Col>
-                    <Col span={6}>
-                        <Statistic title="Активные" value={stats.active} />
+                    <Col xs={12} sm={6}>
+                        <Card>
+                            <Statistic title="Активные" value={stats.active} />
+                        </Card>
                     </Col>
-                    <Col span={6}>
-                        <Statistic title="Выполненные" value={stats.completed} />
+                    <Col xs={12} sm={6}>
+                        <Card>
+                            <Statistic title="Выполненные" value={stats.completed} />
+                        </Card>
                     </Col>
-                    <Col span={6}>
-                        <Statistic title="Прогресс" value={stats.completionRate} suffix="%" />
+                    <Col xs={12} sm={6}>
+                        <Card>
+                            <Statistic title="Прогресс" value={stats.completionRate} suffix="%" />
+                        </Card>
                     </Col>
                 </Row>
 
                 {/* Фильтры и поиск */}
-                <Space wrap style={{ marginBottom: 16, width: '100%' }}>
-                    <Select
-                        value={filter}
-                        onChange={handleFilterChange}
-                        style={{ width: 120 }}
-                    >
-                        <Option value="all">Все</Option>
-                        <Option value="active">Активные</Option>
-                        <Option value="completed">Выполненные</Option>
-                    </Select>
+                <Card className="tasklist-filters">
+                    <Space wrap className="tasklist-filters-space">
+                        <Space wrap className="tasklist-filters-left">
+                            <Select
+                                value={filter}
+                                onChange={handleFilterChange}
+                                style={{ width: 120 }}
+                            >
+                                <Option value="all">Все</Option>
+                                <Option value="active">Активные</Option>
+                                <Option value="completed">Выполненные</Option>
+                            </Select>
 
-                    <Search
-                        placeholder="Поиск задач..."
-                        value={searchQuery}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        style={{ width: 300 }}
-                        prefix={<SearchOutlined />}
-                        allowClear
-                    />
+                            <Search
+                                placeholder="Поиск задач..."
+                                value={searchQuery}
+                                onChange={(e) => handleSearch(e.target.value)}
+                                style={{ minWidth: 150, maxWidth: '100%' }}
+                                prefix={<SearchOutlined />}
+                                allowClear
+                            />
+                        </Space>
 
-                    <Button
-                        type="primary"
-                        icon={<PlusOutlined />}
-                        onClick={() => setIsFormVisible(true)}
-                    >
-                        Добавить задачу
-                    </Button>
-                </Space>
+                        <Button
+                            type="primary"
+                            icon={<PlusOutlined />}
+                            onClick={() => setIsFormVisible(true)}
+                        >
+                            Добавить задачу
+                        </Button>
+
+                    </Space>
+                </Card>
             </div>
 
             {/* Список задач */}
             <Spin spinning={loading}>
                 {sortedTasks.length > 0 ? (
-                    <List
-                        dataSource={sortedTasks}
-                        renderItem={(task) => (
-                            <List.Item key={task.id}>
+                    <div className="tasklist-tasks-container">
+                        {sortedTasks.map((task) => (
+                            <div key={task.id} className="task-card">
                                 <TaskItem
                                     task={task}
                                     onEdit={openEditForm}
                                 />
-                            </List.Item>
-                        )}
-                    />
+                            </div>
+                        ))}
+                    </div>
                 ) : (
                     <Empty
                         description="Задач пока нет"
