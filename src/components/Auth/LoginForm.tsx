@@ -3,6 +3,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { login, clearError } from '../../store/slices/authSlice';
 import { useEffect } from 'react';
+import { VALIDATION_CONSTANTS } from '../../constants';
 import '../../styles/auth.css';
 
 const { Title } = Typography;
@@ -19,9 +20,9 @@ export const LoginForm = ({ onSwitchToRegister }: LoginFormProps) => {
     const handleSubmit = async (values: { email: string; password: string }) => {
         try {
             await dispatch(login(values)).unwrap();
-            message.success('Вход выполнен успешно!');
+            message.success(VALIDATION_CONSTANTS.SUCCESS.LOGIN_SUCCESS);
         } catch (error) {
-            message.error('Ошибка входа. Проверьте данные.');
+            message.error(VALIDATION_CONSTANTS.ACTION_ERRORS.LOGIN_ERROR);
         }
     };
 
@@ -48,8 +49,8 @@ export const LoginForm = ({ onSwitchToRegister }: LoginFormProps) => {
                 <Form.Item
                     name="email"
                     rules={[
-                        { required: true, message: 'Введите email!' },
-                        { type: 'email', message: 'Введите корректный email!' },
+                        { required: true, message: VALIDATION_CONSTANTS.ERRORS.EMAIL_REQUIRED },
+                        { type: 'email', message: VALIDATION_CONSTANTS.ERRORS.EMAIL_INVALID },
                     ]}
                 >
                     <Input
@@ -61,8 +62,8 @@ export const LoginForm = ({ onSwitchToRegister }: LoginFormProps) => {
                 <Form.Item
                     name="password"
                     rules={[
-                        { required: true, message: 'Введите пароль!' },
-                        { min: 6, message: 'Пароль должен содержать минимум 6 символов!' },
+                        { required: true, message: VALIDATION_CONSTANTS.ERRORS.PASSWORD_REQUIRED },
+                        { min: VALIDATION_CONSTANTS.PASSWORD_MIN_LENGTH, message: VALIDATION_CONSTANTS.ERRORS.PASSWORD_TOO_SHORT },
                     ]}
                 >
                     <Input.Password

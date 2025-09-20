@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Modal, Form, Input, Select, Button, message, Space } from 'antd';
 import type { TaskFormData } from '../../types';
+import { VALIDATION_CONSTANTS, TASK_PRIORITIES, TASK_PRIORITY_LABELS, UI_CONSTANTS } from '../../constants';
 import '../../styles/taskform.css';
 
 const { TextArea } = Input;
@@ -60,8 +61,8 @@ export const TaskForm = ({
                     name="title"
                     label="Название задачи"
                     rules={[
-                        { required: true, message: 'Введите название задачи!' },
-                        { max: 100, message: 'Название должно содержать максимум 100 символов!' },
+                        { required: true, message: VALIDATION_CONSTANTS.ERRORS.TASK_TITLE_REQUIRED },
+                        { max: VALIDATION_CONSTANTS.TASK_TITLE_MAX_LENGTH, message: VALIDATION_CONSTANTS.ERRORS.TASK_TITLE_TOO_LONG },
                     ]}
                 >
                     <Input placeholder="Введите название задачи" />
@@ -71,11 +72,11 @@ export const TaskForm = ({
                     name="description"
                     label="Описание"
                     rules={[
-                        { max: 500, message: 'Описание должно содержать максимум 500 символов!' },
+                        { max: VALIDATION_CONSTANTS.TASK_DESCRIPTION_MAX_LENGTH, message: VALIDATION_CONSTANTS.ERRORS.TASK_DESCRIPTION_TOO_LONG },
                     ]}
                 >
                     <TextArea
-                        rows={4}
+                        rows={UI_CONSTANTS.TEXTAREA_ROWS}
                         placeholder="Введите описание задачи (необязательно)"
                     />
                 </Form.Item>
@@ -83,12 +84,12 @@ export const TaskForm = ({
                 <Form.Item
                     name="priority"
                     label="Приоритет"
-                    rules={[{ required: true, message: 'Выберите приоритет!' }]}
+                    rules={[{ required: true, message: VALIDATION_CONSTANTS.ERRORS.TASK_PRIORITY_REQUIRED }]}
                 >
                     <Select placeholder="Выберите приоритет">
-                        <Option value="low">Низкий</Option>
-                        <Option value="medium">Средний</Option>
-                        <Option value="high">Высокий</Option>
+                        <Option value={TASK_PRIORITIES.LOW}>{TASK_PRIORITY_LABELS[TASK_PRIORITIES.LOW]}</Option>
+                        <Option value={TASK_PRIORITIES.MEDIUM}>{TASK_PRIORITY_LABELS[TASK_PRIORITIES.MEDIUM]}</Option>
+                        <Option value={TASK_PRIORITIES.HIGH}>{TASK_PRIORITY_LABELS[TASK_PRIORITIES.HIGH]}</Option>
                     </Select>
                 </Form.Item>
 

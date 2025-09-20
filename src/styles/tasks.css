@@ -1,18 +1,25 @@
 /* Адаптивные карточки задач */
-.task-card {
-  width: 300px;
-  flex: 0 0 300px;
+:root {
+  --task-card-width: 300px;
+  --task-card-min-width-mobile: 280px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-mobile: 480px;
 }
 
-@media (max-width: 768px) {
+.task-card {
+  width: var(--task-card-width);
+  flex: 0 0 var(--task-card-width);
+}
+
+@media (max-width: var(--breakpoint-tablet)) {
   .task-card {
     width: 100%;
     flex: 1 1 100%;
-    min-width: 280px;
+    min-width: var(--task-card-min-width-mobile);
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: var(--breakpoint-mobile)) {
   .task-card {
     width: 100%;
     flex: 1 1 100%;

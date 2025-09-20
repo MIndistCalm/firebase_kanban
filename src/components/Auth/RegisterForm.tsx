@@ -4,6 +4,7 @@ import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { register, clearError } from '../../store/slices/authSlice';
+import { VALIDATION_CONSTANTS } from '../../constants';
 import '../../styles/auth.css';
 
 const { Title } = Typography;
@@ -20,7 +21,7 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
 
     const handleSubmit = async (values: { email: string; password: string; confirmPassword: string; displayName?: string }) => {
         if (values.password !== values.confirmPassword) {
-            message.error('Пароли не совпадают!');
+            message.error(VALIDATION_CONSTANTS.ERRORS.PASSWORDS_NOT_MATCH);
             return;
         }
 
@@ -30,10 +31,10 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
                 password: values.password,
                 displayName: values.displayName,
             })).unwrap();
-            message.success('Регистрация выполнена успешно!');
+            message.success(VALIDATION_CONSTANTS.SUCCESS.REGISTER_SUCCESS);
             navigate('/home');
         } catch (error) {
-            message.error('Ошибка регистрации. Попробуйте еще раз.');
+            message.error(VALIDATION_CONSTANTS.ACTION_ERRORS.REGISTER_ERROR);
         }
     };
 
@@ -60,7 +61,7 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
                 <Form.Item
                     name="displayName"
                     rules={[
-                        { max: 50, message: 'Имя должно содержать максимум 50 символов!' },
+                        { max: VALIDATION_CONSTANTS.DISPLAY_NAME_MAX_LENGTH, message: VALIDATION_CONSTANTS.ERRORS.DISPLAY_NAME_TOO_LONG },
                     ]}
                 >
                     <Input
@@ -72,8 +73,8 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
                 <Form.Item
                     name="email"
                     rules={[
-                        { required: true, message: 'Введите email!' },
-                        { type: 'email', message: 'Введите корректный email!' },
+                        { required: true, message: VALIDATION_CONSTANTS.ERRORS.EMAIL_REQUIRED },
+                        { type: 'email', message: VALIDATION_CONSTANTS.ERRORS.EMAIL_INVALID },
                     ]}
                 >
                     <Input
@@ -85,8 +86,8 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
                 <Form.Item
                     name="password"
                     rules={[
-                        { required: true, message: 'Введите пароль!' },
-                        { min: 6, message: 'Пароль должен содержать минимум 6 символов!' },
+                        { required: true, message: VALIDATION_CONSTANTS.ERRORS.PASSWORD_REQUIRED },
+                        { min: VALIDATION_CONSTANTS.PASSWORD_MIN_LENGTH, message: VALIDATION_CONSTANTS.ERRORS.PASSWORD_TOO_SHORT },
                     ]}
                 >
                     <Input.Password
@@ -98,7 +99,7 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
                 <Form.Item
                     name="confirmPassword"
                     rules={[
-                        { required: true, message: 'Подтвердите пароль!' },
+                        { required: true, message: VALIDATION_CONSTANTS.ERRORS.CONFIRM_PASSWORD_REQUIRED },
                     ]}
                 >
                     <Input.Password

@@ -1,5 +1,9 @@
 /* Стили burger menu */
-@media (min-width: 768px) {
+:root {
+  --breakpoint-tablet: 768px;
+}
+
+@media (min-width: var(--breakpoint-tablet)) {
     .desktop-only {
       display: flex !important;
     }
@@ -9,7 +13,7 @@
     }
   }
   
-  @media (max-width: 767px) {
+  @media (max-width: calc(var(--breakpoint-tablet) - 1px)) {
     .desktop-only {
       display: none !important;
     }

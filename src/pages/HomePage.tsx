@@ -1,8 +1,9 @@
-import { Layout, Button, Typography, Space, Dropdown, Menu } from 'antd';
+import { Layout, Button, Typography, Space, Dropdown, message } from 'antd';
 import { LogoutOutlined, UserOutlined, MenuOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { logout } from '../store/slices/authSlice';
 import { TaskList } from '../components/Tasks/TaskList';
+import { VALIDATION_CONSTANTS } from '../constants';
 import '../styles/homepage.css';
 
 const { Header, Content } = Layout;
@@ -12,8 +13,13 @@ export const HomePage = () => {
     const dispatch = useAppDispatch();
     const { user } = useAppSelector((state) => state.auth);
 
-    const handleLogout = () => {
-        dispatch(logout());
+    const handleLogout = async () => {
+        try {
+            await dispatch(logout()).unwrap();
+            message.success(VALIDATION_CONSTANTS.SUCCESS.LOGOUT_SUCCESS);
+        } catch (error) {
+            message.error(VALIDATION_CONSTANTS.ACTION_ERRORS.LOGOUT_ERROR);
+        }
     };
 
     const userMenuItems = [

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Empty, Spin, Button, Input, Select, Space, Typography, Statistic, Row, Col, Card } from 'antd';
+import { Empty, Spin, Button, Input, Select, Space, Typography, Statistic, Row, Col, Card, message } from 'antd';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import type { Task, TaskFilter, TaskFormData } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -7,6 +7,7 @@ import { addTask, editTask, fetchTasks, setFilter, setSearchQuery } from '../../
 import { getFilteredTasks, getTaskStats, sortTasksByPriority } from '../../utils/taskUtils';
 import { TaskItem } from './TaskItem';
 import { TaskForm } from './TaskForm';
+import { UI_CONSTANTS, TASK_FILTERS, TASK_FILTER_LABELS, VALIDATION_CONSTANTS } from '../../constants';
 import '../../styles/tasklist.css';
 
 const { Search } = Input;
@@ -25,7 +26,14 @@ export const TaskList = () => {
     // Загружаем задачи при монтировании компонента
     useEffect(() => {
         if (user) {
-            dispatch(fetchTasks(user.uid));
+            const loadTasks = async () => {
+                try {
+                    await dispatch(fetchTasks(user.uid)).unwrap();
+                } catch (error) {
+                    message.error(VALIDATION_CONSTANTS.ACTION_ERRORS.TASK_FETCH_ERROR);
+                }
+            };
+            loadTasks();
         }
     }, [dispatch, user]);
 
@@ -36,15 +44,25 @@ export const TaskList = () => {
 
     const handleAddTask = async (values: TaskFormData) => {
         if (user) {
-            await dispatch(addTask({ taskData: values, userId: user.uid }));
-            setIsFormVisible(false);
+            try {
+                await dispatch(addTask({ taskData: values, userId: user.uid })).unwrap();
+                message.success(VALIDATION_CONSTANTS.SUCCESS.TASK_CREATED);
+                setIsFormVisible(false);
+            } catch (error) {
+                message.success(VALIDATION_CONSTANTS.ACTION_ERRORS.TASK_CREATE_ERROR);
+            }
         }
     };
 
     const handleEditTask = async (values: TaskFormData) => {
         if (editingTask) {
-            await dispatch(editTask({ taskId: editingTask.id, updates: values }));
-            setEditingTask(null);
+            try {
+                await dispatch(editTask({ taskId: editingTask.id, updates: values })).unwrap();
+                message.success(VALIDATION_CONSTANTS.SUCCESS.TASK_UPDATED);
+                setEditingTask(null);
+            } catch (error) {
+                message.success(VALIDATION_CONSTANTS.ACTION_ERRORS.TASK_UPDATE_ERROR);
+            }
         }
     };
 
@@ -71,23 +89,23 @@ export const TaskList = () => {
                 <Title level={2}>Мои задачи</Title>
 
                 {/* Статистика */}
-                <Row gutter={[16, 16]} className="tasklist-stats">
-                    <Col xs={12} sm={6}>
+                <Row gutter={[UI_CONSTANTS.GRID_GUTTER, UI_CONSTANTS.GRID_GUTTER]} className="tasklist-stats">
+                    <Col xs={UI_CONSTANTS.GRID_COLUMNS_MOBILE} sm={UI_CONSTANTS.GRID_COLUMNS_TABLET}>
                         <Card>
                             <Statistic title="Всего задач" value={stats.total} />
                         </Card>
                     </Col>
-                    <Col xs={12} sm={6}>
+                    <Col xs={UI_CONSTANTS.GRID_COLUMNS_MOBILE} sm={UI_CONSTANTS.GRID_COLUMNS_TABLET}>
                         <Card>
                             <Statistic title="Активные" value={stats.active} />
                         </Card>
                     </Col>
-                    <Col xs={12} sm={6}>
+                    <Col xs={UI_CONSTANTS.GRID_COLUMNS_MOBILE} sm={UI_CONSTANTS.GRID_COLUMNS_TABLET}>
                         <Card>
                             <Statistic title="Выполненные" value={stats.completed} />
                         </Card>
                     </Col>
-                    <Col xs={12} sm={6}>
+                    <Col xs={UI_CONSTANTS.GRID_COLUMNS_MOBILE} sm={UI_CONSTANTS.GRID_COLUMNS_TABLET}>
                         <Card>
                             <Statistic title="Прогресс" value={stats.completionRate} suffix="%" />
                         </Card>
@@ -101,18 +119,18 @@ export const TaskList = () => {
                             <Select
                                 value={filter}
                                 onChange={handleFilterChange}
-                                style={{ width: 120 }}
+                                style={{ width: UI_CONSTANTS.SELECT_WIDTH }}
                             >
-                                <Option value="all">Все</Option>
-                                <Option value="active">Активные</Option>
-                                <Option value="completed">Выполненные</Option>
+                                <Option value={TASK_FILTERS.ALL}>{TASK_FILTER_LABELS[TASK_FILTERS.ALL]}</Option>
+                                <Option value={TASK_FILTERS.ACTIVE}>{TASK_FILTER_LABELS[TASK_FILTERS.ACTIVE]}</Option>
+                                <Option value={TASK_FILTERS.COMPLETED}>{TASK_FILTER_LABELS[TASK_FILTERS.COMPLETED]}</Option>
                             </Select>
 
                             <Search
                                 placeholder="Поиск задач..."
                                 value={searchQuery}
                                 onChange={(e) => handleSearch(e.target.value)}
-                                style={{ minWidth: 150, maxWidth: '100%' }}
+                                style={{ minWidth: UI_CONSTANTS.SEARCH_MIN_WIDTH, maxWidth: '100%' }}
                                 prefix={<SearchOutlined />}
                                 allowClear
                             />
