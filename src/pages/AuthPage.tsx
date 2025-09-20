@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Layout } from 'antd';
-import { LoginForm } from './LoginForm';
-import { RegisterForm } from './RegisterForm';
+import { LoginForm } from '../components/Auth/LoginForm';
+import { RegisterForm } from '../components/Auth/RegisterForm';
 
 const { Content } = Layout;
 

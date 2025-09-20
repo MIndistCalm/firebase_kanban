@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
-import { Button, ConfigProvider } from 'antd';
+import { ConfigProvider } from 'antd';
 import ruRU from 'antd/locale/ru_RU';
 import { store } from './store';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
-import { initAuth, logout } from './store/slices/authSlice';
-import { AuthPage } from './components/Auth/AuthPage';
+import { initAuth } from './store/slices/authSlice';
+import { HomePage } from './pages/HomePage';
+import { AuthPage } from './pages/AuthPage';
 
 const AppContent = () => {
   const dispatch = useAppDispatch();
@@ -28,19 +29,7 @@ const AppContent = () => {
     );
   }
 
-  return (
-    <div>
-      {user ? (
-        <div>
-          <h1>Добро пожаловать, {user.displayName || user.email}!</h1>
-          <p>Вы успешно вошли в систему</p>
-          <Button onClick={() => dispatch(logout())}>Выйти</Button>
-        </div>
-      ) : (
-        <AuthPage />
-      )}
-    </div>
-  );
+  return user ? <HomePage /> : <AuthPage />;
 };
 
 export const App = () => {
