@@ -1,8 +1,9 @@
+import { useEffect } from 'react';
 import { Form, Input, Button, Card, Typography, message } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { register, clearError } from '../../store/slices/authSlice';
-import { useEffect } from 'react';
 
 const { Title } = Typography;
 
@@ -13,6 +14,7 @@ interface RegisterFormProps {
 export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const { loading, error } = useAppSelector((state) => state.auth);
 
     const handleSubmit = async (values: { email: string; password: string; confirmPassword: string; displayName?: string }) => {
@@ -28,6 +30,7 @@ export const RegisterForm = ({ onSwitchToLogin }: RegisterFormProps) => {
                 displayName: values.displayName,
             })).unwrap();
             message.success('Регистрация выполнена успешно!');
+            navigate('/home');
         } catch (error) {
             message.error('Ошибка регистрации. Попробуйте еще раз.');
         }

@@ -7,11 +7,11 @@ const { Option } = Select;
 
 interface TaskFormProps {
     visible: boolean;
-    onCancel: () => void;
-    onSubmit: (values: TaskFormData) => void;
+    title: string;
     initialValues?: Partial<TaskFormData>;
     loading?: boolean;
-    title: string;
+    onCancel: VoidFunction;
+    onSubmit: (values: TaskFormData) => void;
 }
 
 export const TaskForm = ({

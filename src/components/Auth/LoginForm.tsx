@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 const { Title } = Typography;
 
 interface LoginFormProps {
-    onSwitchToRegister: () => void;
+    onSwitchToRegister: VoidFunction;
 }
 
 export const LoginForm = ({ onSwitchToRegister }: LoginFormProps) => {
